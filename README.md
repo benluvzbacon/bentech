@@ -64,6 +64,19 @@ build/libs/bentech-1.0.0.jar
 
 Drop that JAR into your `mods/` folder (with Fabric Loader + Fabric API for 1.21.1).
 
+### Verified build
+
+The mod compiles and produces a real, remapped, playable JAR. Because the Arena
+sandbox has no JDK and its network only reaches GitHub (not Maven/Fabric/Mojang),
+the build is executed on a **GitHub Actions** runner (`ubuntu-latest`, Temurin
+JDK 21, full network). The CI workflow is in [.github/workflows/build.yml](.github/workflows/build.yml)
+and is triggered on pushes to the `arena/01a07e60-bentech` branch (or manually via
+`workflow_dispatch`). It runs `./gradlew build` and uploads `build/libs/*.jar` as a
+workflow artifact.
+
+A copy of the built JAR is also committed to `release/bentech-1.0.0.jar`, so it is
+always available in the repository even outside a local build.
+
 ## Project layout
 
 ```
@@ -82,5 +95,6 @@ tools/generate_assets.sh  # regenerates all textures / models / datapack JSON
 ```
 
 > **Note for the Arena sandbox:** the sandbox has no JDK and its network only reaches GitHub,
-> so `./gradlew build` cannot run here (Gradle, Minecraft and the Fabric/Maven repositories are
-> unreachable). Run the build in an environment that has Java 21 and normal Maven/Fabric access.
+> so `./gradlew build` cannot run here directly. The build is instead run through the included
+> GitHub Actions workflow, which compiles the mod on a real runner and exposes the JAR both as a
+> workflow artifact and in [`release/bentech-1.0.0.jar`](release/bentech-1.0.0.jar).
