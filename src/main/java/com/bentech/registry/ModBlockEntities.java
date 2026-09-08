@@ -1,6 +1,7 @@
 package com.bentech.registry;
 
 import com.bentech.BenTech;
+import com.bentech.block.entity.CableBlockEntity;
 import com.bentech.block.entity.GeneratorBlockEntity;
 import com.bentech.block.entity.ProcessingMachineBlockEntity;
 import net.minecraft.core.Registry;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 /**
- * Registers the two block entity types used by all machines.
+ * Registers the block entity types used by machines and cables.
  */
 public final class ModBlockEntities {
 
@@ -21,11 +22,18 @@ public final class ModBlockEntities {
                     ModBlocks.MACERATOR,
                     ModBlocks.ELECTRIC_FURNACE,
                     ModBlocks.ALLOY_SMELTER,
-                    ModBlocks.COMPRESSOR).build());
+                    ModBlocks.COMPRESSOR,
+                    ModBlocks.WIREMILL,
+                    ModBlocks.RECYCLER,
+                    ModBlocks.CENTRIFUGE).build());
 
     public static final BlockEntityType<GeneratorBlockEntity> GENERATOR = register(
             "generator",
             BlockEntityType.Builder.of(GeneratorBlockEntity::new, ModBlocks.GENERATOR).build());
+
+    public static final BlockEntityType<CableBlockEntity> CABLE = register(
+            "cable",
+            BlockEntityType.Builder.of(CableBlockEntity::new, ModBlocks.CABLE).build());
 
     private ModBlockEntities() {
     }

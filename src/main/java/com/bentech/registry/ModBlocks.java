@@ -3,6 +3,7 @@ package com.bentech.registry;
 import com.bentech.BenTech;
 import com.bentech.api.Material;
 import com.bentech.api.Materials;
+import com.bentech.block.CableBlock;
 import com.bentech.block.MachineBlock;
 import com.bentech.block.MachineType;
 import net.minecraft.core.Registry;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
- * Registers machine blocks, metal blocks and ore blocks.
+ * Registers machine blocks, cable blocks, metal blocks and ore blocks.
  */
 public final class ModBlocks {
 
@@ -22,7 +23,12 @@ public final class ModBlocks {
     public static final MachineBlock ELECTRIC_FURNACE = machine(MachineType.ELECTRIC_FURNACE);
     public static final MachineBlock ALLOY_SMELTER = machine(MachineType.ALLOY_SMELTER);
     public static final MachineBlock COMPRESSOR = machine(MachineType.COMPRESSOR);
+    public static final MachineBlock WIREMILL = machine(MachineType.WIREMILL);
+    public static final MachineBlock RECYCLER = machine(MachineType.RECYCLER);
+    public static final MachineBlock CENTRIFUGE = machine(MachineType.CENTRIFUGE);
     public static final MachineBlock GENERATOR = machine(MachineType.GENERATOR);
+
+    public static final Block CABLE = cable();
 
     private ModBlocks() {
     }
@@ -47,6 +53,12 @@ public final class ModBlocks {
     private static MachineBlock machine(MachineType type) {
         MachineBlock block = new MachineBlock(machineProperties(), type);
         registerBlock(block, type.getId());
+        return block;
+    }
+
+    private static Block cable() {
+        CableBlock block = new CableBlock(machineProperties());
+        registerBlock(block, "cable");
         return block;
     }
 

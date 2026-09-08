@@ -1,5 +1,6 @@
 package com.bentech;
 
+import com.bentech.gui.ModMenus;
 import com.bentech.registry.ModBlockEntities;
 import com.bentech.registry.ModBlocks;
 import com.bentech.registry.ModCreativeTab;
@@ -32,8 +33,9 @@ public class BenTech implements ModInitializer {
     public void onInitialize() {
         ModItems.load();
         ModBlocks.load();
-        // Reference the block entity types so their static initialisers run now.
+        // Touch static holders so block entities and the menu type register now.
         LOGGER.info("Registered block entity types: {}", ModBlockEntities.PROCESSING);
+        LOGGER.info("Registered machine menu: {}", ModMenus.MACHINE);
         MachineRecipes.build();
         ModCreativeTab.load();
         ModWorldgen.register();

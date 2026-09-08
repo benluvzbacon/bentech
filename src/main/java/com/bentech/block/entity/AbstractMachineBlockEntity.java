@@ -1,12 +1,17 @@
 package com.bentech.block.entity;
 
+import com.bentech.gui.MachineMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -17,9 +22,10 @@ import net.minecraft.world.level.block.state.BlockState;
  * Shared machinery base. Every machine holds a small internal "EU" energy
  * buffer and a fixed-size inventory. Slots 0/1 are inputs, slot 2 is output
  * (for generators slot 0 is the fuel input). Subclasses implement the per-tick
- * behaviour.
+ * behaviour. Implements {@link MenuProvider} so right-clicking a machine opens
+ * an in-game GUI showing its contents, energy buffer and progress.
  */
-public abstract class AbstractMachineBlockEntity extends BlockEntity implements Container {
+public abstract class AbstractMachineBlockEntity extends BlockEntity implements Container, MenuProvider {
 
     /** Input A / fuel. */
     public static final int SLOT_INPUT_0 = 0;
@@ -31,6 +37,36 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     public static final int INVENTORY_SIZE = 3;
 
     protected int energy;
+
+    // Container data indices, synced to the client GUI.
+    public static final int DATA_ENERGY = 0;
+    public static final int DATA_MAX_ENERGY = 1;
+    public static final int DATA_PROGRESS = 2;
+    public static final int DATA_DURATION = 3;
+    public static final int DATA_COUNT = 4;
+
+    private final ContainerData containerData = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case DATA_ENERGY -> energy;
+                case DATA_MAX_ENERGY -> (int) getMaxEnergy();
+                case DATA_PROGRESS -> getProgress();
+                case DATA_DURATION -> getDuration();
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) {
+            // data slots are read-only mirrors of the block entity state
+        }
+
+        @Override
+        public int getCount() {
+            return DATA_COUNT;
+        }
+    };
 
     protected AbstractMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -76,8 +112,30 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
     public abstract boolean isActive();
 
+    /** Renders the GUI progress / fuel amount (0 when idle). */
+    public abstract int getProgress();
+
+    /** Full progress / fuel duration in ticks (>= 1). */
+    public abstract int getDuration();
+
     /** Runs once per server tick. */
     public abstract void tickServer(Level level, BlockPos pos, BlockState state);
+
+    public ContainerData getData() {
+        return containerData;
+    }
+
+    // ------------------------------------------------------------ MenuProvider
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(getBlockState().getBlock().getDescriptionId());
+    }
+
+    @Override
+    public com.bentech.gui.MachineMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+        return new MachineMenu(containerId, playerInventory, this, this.getData());
+    }
 
     // ------------------------------------------------------------ Container
 

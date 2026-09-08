@@ -30,13 +30,20 @@ public final class ModCreativeTab {
                     output.accept(new ItemStack(ModBlocks.ELECTRIC_FURNACE));
                     output.accept(new ItemStack(ModBlocks.ALLOY_SMELTER));
                     output.accept(new ItemStack(ModBlocks.COMPRESSOR));
+                    output.accept(new ItemStack(ModBlocks.WIREMILL));
+                    output.accept(new ItemStack(ModBlocks.RECYCLER));
+                    output.accept(new ItemStack(ModBlocks.CENTRIFUGE));
                     output.accept(new ItemStack(ModBlocks.GENERATOR));
+                    output.accept(new ItemStack(ModBlocks.CABLE));
                     output.accept(new ItemStack(ModItems.MACHINE_CASING));
                     output.accept(new ItemStack(ModItems.BASIC_CIRCUIT));
                     output.accept(new ItemStack(ModItems.ADVANCED_CIRCUIT));
                     output.accept(new ItemStack(ModItems.ELECTRIC_MOTOR));
                     output.accept(new ItemStack(ModItems.ELECTRIC_PUMP));
                     output.accept(new ItemStack(ModItems.CAPACITOR));
+                    output.accept(new ItemStack(ModItems.BATTERY));
+                    output.accept(new ItemStack(ModItems.EMITTER));
+                    output.accept(new ItemStack(ModItems.SENSOR));
                     for (Material m : Materials.all()) {
                         accept(output, m.dust);
                         accept(output, m.ingot);
@@ -44,6 +51,7 @@ public final class ModCreativeTab {
                         accept(output, m.plate);
                         accept(output, m.rod);
                         accept(output, m.gear);
+                        accept(output, m.wire);
                         accept(output, m.ore);
                         accept(output, m.blockItem);
                     }

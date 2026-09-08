@@ -24,6 +24,9 @@ public final class ModItems {
     public static final Item ELECTRIC_MOTOR = register("electric_motor", new Item(plain(64)));
     public static final Item ELECTRIC_PUMP = register("electric_pump", new Item(plain(64)));
     public static final Item CAPACITOR = register("capacitor", new Item(plain(64)));
+    public static final Item BATTERY = register("battery", new Item(plain(64)));
+    public static final Item EMITTER = register("emitter", new Item(plain(64)));
+    public static final Item SENSOR = register("sensor", new Item(plain(64)));
 
     private ModItems() {
     }
@@ -47,6 +50,7 @@ public final class ModItems {
             m.plate = register(m.getName() + "_plate", new MaterialItem(m, "plate", plain(64)));
             m.rod = register(m.getName() + "_rod", new MaterialItem(m, "rod", plain(64)));
             m.gear = register(m.getName() + "_gear", new MaterialItem(m, "gear", plain(64)));
+            m.wire = register(m.getName() + "_wire", new MaterialItem(m, "wire", plain(64)));
         }
     }
 
@@ -60,6 +64,7 @@ public final class ModItems {
             case "plate" -> getter = mat -> mat.plate;
             case "rod" -> getter = mat -> mat.rod;
             case "gear" -> getter = mat -> mat.gear;
+            case "wire" -> getter = mat -> mat.wire;
             default -> getter = mat -> mat.ingot;
         }
         return getter.apply(m);

@@ -1,6 +1,1 @@
-{
-  "type": "minecraft:crafting_shaped",
-  "pattern": ["mpm","mcm","mmm"],
-  "key": {"m": {"item": "bentech:machine_casing"}, "p": {"item": "bentech:electric_pump"}, "c": {"item": "bentech:basic_circuit"}},
-  "result": {"item": "bentech:macerator", "count": 1}
-}
+{"type":"minecraft:crafting_shaped","pattern":["mpm","mcm","mmm"],"key":{"m":{"item":"bentech:machine_casing"},"p":{"item":"bentech:electric_pump"},"c":{"item":"bentech:basic_circuit"}},"result":{"item":"bentech:macerator","count":1}}

@@ -53,6 +53,16 @@ public class ProcessingMachineBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
+    public int getProgress() {
+        return progress;
+    }
+
+    @Override
+    public int getDuration() {
+        return Math.max(1, MachineRecipes.durationTicks(machineType));
+    }
+
+    @Override
     public void tickServer(Level level, BlockPos pos, BlockState state) {
         if (level == null || level.isClientSide()) {
             return;

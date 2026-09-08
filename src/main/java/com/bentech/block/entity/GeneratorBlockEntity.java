@@ -46,6 +46,17 @@ public class GeneratorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
+    public int getProgress() {
+        return burnTicksLeft;
+    }
+
+    @Override
+    public int getDuration() {
+        // Reference burn duration for the fuel bar (coal = 400 ticks).
+        return 400;
+    }
+
+    @Override
     public void tickServer(Level level, BlockPos pos, BlockState state) {
         if (level == null || level.isClientSide()) {
             return;

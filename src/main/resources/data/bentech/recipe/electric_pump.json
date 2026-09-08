@@ -1,6 +1,1 @@
-{
-  "type": "minecraft:crafting_shaped",
-  "pattern": ["r r","pr p","r r"],
-  "key": {"r": {"item": "bentech:iron_rod"}, "p": {"item": "bentech:copper_plate"}},
-  "result": {"item": "bentech:electric_pump", "count": 1}
-}
+{"type":"minecraft:crafting_shaped","pattern":["r r","pr p","r r"],"key":{"r":{"item":"bentech:iron_rod"},"p":{"item":"bentech:copper_plate"}},"result":{"item":"bentech:electric_pump","count":1}}

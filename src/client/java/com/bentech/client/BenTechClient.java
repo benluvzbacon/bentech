@@ -1,17 +1,20 @@
 package com.bentech.client;
 
+import com.bentech.client.gui.MachineScreen;
+import com.bentech.gui.ModMenus;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 /**
- * Client-side initialisation. BenTech currently has no client-only rendering;
- * this exists so the mod has a proper client entrypoint and can be extended
- * with machine GUI screens and block entity renderers later.
+ * Client-side initialisation. Registers the machine GUI screen against its
+ * menu type so right-clicking a machine opens a real, interactive window.
  */
 public class BenTechClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BenTechClient.LOGGER.info("BenTech client initialised.");
+        MenuScreens.register(ModMenus.MACHINE, MachineScreen::new);
+        LOGGER.info("BenTech client initialised.");
     }
 
     public static final org.slf4j.Logger LOGGER =

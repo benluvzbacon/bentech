@@ -1,6 +1,1 @@
-{
-  "type": "minecraft:crafting_shaped",
-  "pattern": ["ppp","ppp","ppp"],
-  "key": {"p": {"item": "bentech:iron_plate"}},
-  "result": {"item": "bentech:machine_casing", "count": 4}
-}
+{"type":"minecraft:crafting_shaped","pattern":["ppp","ppp","ppp"],"key":{"p":{"item":"bentech:iron_plate"}},"result":{"item":"bentech:machine_casing","count":4}}

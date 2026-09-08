@@ -25,6 +25,7 @@ public class Material {
     public Item plate;
     public Item rod;
     public Item gear;
+    public Item wire;
     public Item ore;
     public Item blockItem;
     public Block block;

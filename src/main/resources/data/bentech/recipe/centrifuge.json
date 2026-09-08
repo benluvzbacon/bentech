@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["mmm","mcm","msm"],"key":{"m":{"item":"bentech:machine_casing"},"c":{"item":"bentech:advanced_circuit"},"s":{"item":"bentech:sensor"}},"result":{"item":"bentech:centrifuge","count":1}}

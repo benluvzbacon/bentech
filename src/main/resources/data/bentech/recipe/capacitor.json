@@ -1,6 +1,1 @@
-{
-  "type": "minecraft:crafting_shaped",
-  "pattern": ["iii","g g","iii"],
-  "key": {"i": {"item": "bentech:copper_plate"}, "g": {"item": "bentech:gold_nugget"}},
-  "result": {"item": "bentech:capacitor", "count": 2}
-}
+{"type":"minecraft:crafting_shaped","pattern":["iii","g g","iii"],"key":{"i":{"item":"bentech:copper_plate"},"g":{"item":"minecraft:gold_nugget"}},"result":{"item":"bentech:capacitor","count":2}}

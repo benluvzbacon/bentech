@@ -14,9 +14,9 @@ public final class Materials {
     public static final Material Bronze =
             new Material("bronze", "Bronze", "(Cu+Sn)", 0xBE7448, Tier.LV, false, true, true);
     public static final Material Iron =
-            new Material("iron", "Iron", "Fe", 0xC8C8C8, Tier.LV, true, false, true);
+            new Material("iron", "Iron", "Fe", 0xC8C8C8, Tier.LV, false, false, true);
     public static final Material Copper =
-            new Material("copper", "Copper", "Cu", 0xB87333, Tier.LV, true, false, true);
+            new Material("copper", "Copper", "Cu", 0xB87333, Tier.LV, false, false, true);
     public static final Material Tin =
             new Material("tin", "Tin", "Sn", 0xD0D0D0, Tier.LV, true, false, true);
     public static final Material Zinc =
@@ -26,7 +26,11 @@ public final class Materials {
     public static final Material Silver =
             new Material("silver", "Silver", "Ag", 0xC0C0C0, Tier.LV, true, false, true);
     public static final Material Gold =
-            new Material("gold", "Gold", "Au", 0xF2D230, Tier.LV, true, false, true);
+            new Material("gold", "Gold", "Au", 0xF2D230, Tier.LV, false, false, true);
+    public static final Material Ruby =
+            new Material("ruby", "Ruby", "Al2O3", 0xE0115F, Tier.MV, true, false, false);
+    public static final Material Sapphire =
+            new Material("sapphire", "Sapphire", "Al2O3", 0x0F52BA, Tier.MV, true, false, false);
 
     public static final Material Steel =
             new Material("steel", "Steel", "Fe(C)", 0x8F8F8F, Tier.MV, false, true, true);
@@ -52,6 +56,8 @@ public final class Materials {
             new Material("iridium", "Iridium", "Ir", 0xDBDBDB, Tier.EV, true, false, true);
     public static final Material Osmium =
             new Material("osmium", "Osmium", "Os", 0xA0A0A0, Tier.IV, true, false, true);
+    public static final Material IridiumAlloy =
+            new Material("iridium_alloy", "Iridium Alloy", "IrRe", 0xDCDCDC, Tier.IV, false, true, true);
 
     private static final List<Material> ALL;
 
@@ -76,6 +82,9 @@ public final class Materials {
         list.add(Platinum);
         list.add(Iridium);
         list.add(Osmium);
+        list.add(Ruby);
+        list.add(Sapphire);
+        list.add(IridiumAlloy);
         ALL = Collections.unmodifiableList(list);
     }
 

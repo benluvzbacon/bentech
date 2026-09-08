@@ -6,11 +6,8 @@ import com.bentech.block.entity.ProcessingMachineBlockEntity;
 import com.bentech.registry.ModBlockEntities;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,9 +18,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
- * A machine block. Right-clicking inserts the held item into the first empty
- * input slot (or, with shift, extracts the output). Machines are also fully
- * automatable with hoppers.
+ * A machine block. Right-clicking opens the machine GUI (a screen) which shows
+ * its inputs, output, energy buffer and process progress. Machines are fully
+ * automatable with hoppers via {@link AbstractMachineBlockEntity}.
  */
 public class MachineBlock extends BaseEntityBlock {
 
@@ -51,6 +48,12 @@ public class MachineBlock extends BaseEntityBlock {
         return new ProcessingMachineBlockEntity(pos, state);
     }
 
+    // Renders the block as a normal 3D model (BaseEntityBlock defaults to INVISIBLE).
+    @Override
+    protected BlockBehaviour.RenderShape getRenderShape(BlockState state) {
+        return BlockBehaviour.RenderShape.MODEL;
+    }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         if (level.isClientSide()) {
@@ -65,50 +68,14 @@ public class MachineBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hit) {
-        if (level.isClientSide()) {
-            return InteractionResult.SUCCESS;
-        }
-        if (!(level.getBlockEntity(pos) instanceof AbstractMachineBlockEntity machine)) {
-            return InteractionResult.PASS;
-        }
-        ItemStack handStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-        if (player.isShiftKeyDown()) {
-            ItemStack out = machine.getItem(AbstractMachineBlockEntity.SLOT_OUTPUT);
-            if (!out.isEmpty()) {
-                machine.setItem(AbstractMachineBlockEntity.SLOT_OUTPUT, ItemStack.EMPTY);
-                if (!player.getInventory().add(out)) {
-                    player.drop(out, false);
-                }
+        if (!level.isClientSide()) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof AbstractMachineBlockEntity machine) {
+                player.openMenu(machine);
             } else {
-                player.displayClientMessage(Component.translatable("message.bentech.no_output"), true);
+                return InteractionResult.PASS;
             }
-            return InteractionResult.sidedSuccess(true);
         }
-        if (!handStack.isEmpty()) {
-            int slot = slotForInsert(machine);
-            if (slot >= 0) {
-                ItemStack toInsert = handStack.copy();
-                toInsert.setCount(1);
-                machine.setItem(slot, toInsert);
-                handStack.shrink(1);
-            } else {
-                player.displayClientMessage(Component.translatable("message.bentech.input_full"), true);
-            }
-            return InteractionResult.sidedSuccess(true);
-        }
-        player.displayClientMessage(Component.literal(
-                type.getDisplayName() + ": " + machine.getEnergy() + "/" + machine.getMaxEnergy() + " EU "
-                        + (machine.isActive() ? "(active)" : "(idle)")), true);
-        return InteractionResult.sidedSuccess(true);
-    }
-
-    private int slotForInsert(AbstractMachineBlockEntity machine) {
-        if (machine.getItem(AbstractMachineBlockEntity.SLOT_INPUT_0).isEmpty()) {
-            return AbstractMachineBlockEntity.SLOT_INPUT_0;
-        }
-        if (machine.getItem(AbstractMachineBlockEntity.SLOT_INPUT_1).isEmpty()) {
-            return AbstractMachineBlockEntity.SLOT_INPUT_1;
-        }
-        return -1;
+        return InteractionResult.SUCCESS;
     }
 }

@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":[" g ","grg"," c "],"key":{"g":{"item":"bentech:gold_plate"},"r":{"item":"bentech:ruby_ingot"},"c":{"item":"bentech:basic_circuit"}},"result":{"item":"bentech:sensor","count":1}}
