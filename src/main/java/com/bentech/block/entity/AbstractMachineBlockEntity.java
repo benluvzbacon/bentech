@@ -1,6 +1,7 @@
 package com.bentech.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -175,37 +176,33 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     // ------------------------------------------------------------------- NBT
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         tag.putInt("energy", energy);
-        if (this.level != null) {
-            ListTag list = new ListTag();
-            for (int i = 0; i < getContainerSize(); i++) {
-                CompoundTag itemTag = new CompoundTag();
-                ItemStack stack = getSlotItem(i);
-                if (!stack.isEmpty()) {
-                    itemTag = stack.save(this.level.registryAccess(), itemTag);
-                }
-                list.add(itemTag);
+        ListTag list = new ListTag();
+        for (int i = 0; i < getContainerSize(); i++) {
+            CompoundTag itemTag = new CompoundTag();
+            ItemStack stack = getSlotItem(i);
+            if (!stack.isEmpty()) {
+                itemTag = stack.save(registries, itemTag);
             }
-            tag.put("items", list);
+            list.add(itemTag);
         }
+        tag.put("items", list);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag) {
-        super.loadAdditional(tag);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         energy = tag.getInt("energy");
-        if (this.level != null) {
-            ListTag list = tag.getList("items", Tag.TAG_COMPOUND);
-            for (int i = 0; i < getContainerSize(); i++) {
-                if (i >= list.size()) {
-                    setSlotItem(i, ItemStack.EMPTY);
-                    continue;
-                }
-                CompoundTag itemTag = list.getCompound(i);
-                setSlotItem(i, ItemStack.parse(this.level.registryAccess(), itemTag).orElse(ItemStack.EMPTY));
+        ListTag list = tag.getList("items", Tag.TAG_COMPOUND);
+        for (int i = 0; i < getContainerSize(); i++) {
+            if (i >= list.size()) {
+                setSlotItem(i, ItemStack.EMPTY);
+                continue;
             }
+            CompoundTag itemTag = list.getCompound(i);
+            setSlotItem(i, ItemStack.parse(registries, itemTag).orElse(ItemStack.EMPTY));
         }
     }
 

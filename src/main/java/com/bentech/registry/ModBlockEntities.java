@@ -4,7 +4,7 @@ import com.bentech.BenTech;
 import com.bentech.block.entity.GeneratorBlockEntity;
 import com.bentech.block.entity.ProcessingMachineBlockEntity;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -32,6 +32,6 @@ public final class ModBlockEntities {
 
     private static <T extends BlockEntity> BlockEntityType<T> register(String path, BlockEntityType<T> type) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(BenTech.MOD_ID, path);
-        return Registry.register(Registries.BLOCK_ENTITY_TYPE, id, type);
+        return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, type);
     }
 }

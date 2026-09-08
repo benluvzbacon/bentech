@@ -4,7 +4,7 @@ import com.bentech.BenTech;
 import com.bentech.api.Material;
 import com.bentech.api.Materials;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -49,7 +49,7 @@ public final class ModCreativeTab {
                 })
                 .build();
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(BenTech.MOD_ID, "main");
-        Registry.register(Registries.CREATIVE_MODE_TAB, id, tab);
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, id, tab);
     }
 
     private static void accept(CreativeModeTab.Output output, Item item) {

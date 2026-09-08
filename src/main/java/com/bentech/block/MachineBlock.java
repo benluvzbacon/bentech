@@ -4,6 +4,7 @@ import com.bentech.block.entity.AbstractMachineBlockEntity;
 import com.bentech.block.entity.GeneratorBlockEntity;
 import com.bentech.block.entity.ProcessingMachineBlockEntity;
 import com.bentech.registry.ModBlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -35,6 +36,11 @@ public class MachineBlock extends BaseEntityBlock {
 
     public MachineType getType() {
         return type;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(props -> new MachineBlock(props, type));
     }
 
     @Override

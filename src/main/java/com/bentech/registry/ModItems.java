@@ -5,7 +5,7 @@ import com.bentech.api.Material;
 import com.bentech.api.Materials;
 import com.bentech.item.MaterialItem;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
@@ -34,7 +34,7 @@ public final class ModItems {
 
     private static <T extends Item> T register(String path, T item) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(BenTech.MOD_ID, path);
-        Registry.register(Registries.ITEM, id, item);
+        Registry.register(BuiltInRegistries.ITEM, id, item);
         return item;
     }
 
