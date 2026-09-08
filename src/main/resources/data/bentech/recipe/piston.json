@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["ppp","m m","r r"],"key":{"p":{"item":"minecraft:iron_ingot"},"m":{"item":"bentech:electric_motor"},"r":{"item":"bentech:iron_rod"}},"result":{"item":"bentech:piston","count":1}}

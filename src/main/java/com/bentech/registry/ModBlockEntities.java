@@ -2,6 +2,7 @@ package com.bentech.registry;
 
 import com.bentech.BenTech;
 import com.bentech.block.entity.CableBlockEntity;
+import com.bentech.block.entity.CreativeEnergyBlockEntity;
 import com.bentech.block.entity.GeneratorBlockEntity;
 import com.bentech.block.entity.ProcessingMachineBlockEntity;
 import net.minecraft.core.Registry;
@@ -34,6 +35,10 @@ public final class ModBlockEntities {
     public static final BlockEntityType<CableBlockEntity> CABLE = register(
             "cable",
             BlockEntityType.Builder.of(CableBlockEntity::new, ModBlocks.CABLE).build());
+
+    public static final BlockEntityType<CreativeEnergyBlockEntity> CREATIVE = register(
+            "creative_energy",
+            BlockEntityType.Builder.of(CreativeEnergyBlockEntity::new, ModBlocks.CREATIVE_ENERGY).build());
 
     private ModBlockEntities() {
     }

@@ -4,6 +4,7 @@ import com.bentech.BenTech;
 import com.bentech.api.Material;
 import com.bentech.api.Materials;
 import com.bentech.block.CableBlock;
+import com.bentech.block.CreativeEnergyBlock;
 import com.bentech.block.MachineBlock;
 import com.bentech.block.MachineType;
 import net.minecraft.core.Registry;
@@ -29,6 +30,8 @@ public final class ModBlocks {
     public static final MachineBlock GENERATOR = machine(MachineType.GENERATOR);
 
     public static final Block CABLE = cable();
+
+    public static final CreativeEnergyBlock CREATIVE_ENERGY = creativeEnergy();
 
     private ModBlocks() {
     }
@@ -59,6 +62,12 @@ public final class ModBlocks {
     private static Block cable() {
         CableBlock block = new CableBlock(machineProperties());
         registerBlock(block, "cable");
+        return block;
+    }
+
+    private static CreativeEnergyBlock creativeEnergy() {
+        CreativeEnergyBlock block = new CreativeEnergyBlock(machineProperties());
+        registerBlock(block, "creative_energy");
         return block;
     }
 

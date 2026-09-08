@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["g g","grg","g g"],"key":{"g":{"item":"bentech:steel_gear"},"r":{"item":"bentech:steel_rod"}},"result":{"item":"bentech:advanced_gearbox","count":1}}

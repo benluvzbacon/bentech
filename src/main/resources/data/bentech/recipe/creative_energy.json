@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["cec","efe","cec"],"key":{"c":{"item":"bentech:advanced_circuit"},"e":{"item":"bentech:emitter"},"f":{"item":"bentech:field_generator"}},"result":{"item":"bentech:creative_energy","count":1}}

@@ -1,5 +1,6 @@
 package com.bentech.client;
 
+import com.bentech.client.gui.CreativeScreen;
 import com.bentech.client.gui.MachineScreen;
 import com.bentech.gui.ModMenus;
 import net.fabricmc.api.ClientModInitializer;
@@ -14,6 +15,7 @@ public class BenTechClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         MenuScreens.register(ModMenus.MACHINE, MachineScreen::new);
+        MenuScreens.register(ModMenus.CREATIVE, CreativeScreen::new);
         LOGGER.info("BenTech client initialised.");
     }
 

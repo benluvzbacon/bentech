@@ -58,16 +58,16 @@ convert -size 64x64 xc:'#1b1b1f' -fill '#3a3a42' -draw 'roundrectangle 2,2 61,61
         -fill '#1b1b1f' -draw 'circle 32,32 32,22' -fill '#F2D230' -draw 'circle 32,32 32,26' \
         "$RES/icon.png" >/dev/null 2>&1 || true
 
-# machine id:display:harvest
+# machine id:display:accent  (all share one casing colour; distinct front-panel designs)
 MACHINES=(
   "macerator:Macerator:#BE7448"
-  "electric_furnace:Electric Furnace:#C8C8C8"
+  "electric_furnace:Electric Furnace:#FF7043"
   "alloy_smelter:Alloy Smelter:#E1BE5B"
-  "compressor:Compressor:#B9C1B4"
-  "wiremill:Wiremill:#9AB8C8"
+  "compressor:Compressor:#9AB8C8"
+  "wiremill:Wiremill:#C0C0C0"
   "recycler:Recycler:#7FBF7F"
-  "centrifuge:Centrifuge:#B9F3E0"
-  "generator:Generator:#B22222"
+  "centrifuge:Centrifuge:#54D62C"
+  "generator:Generator:#F2D230"
 )
 
 # name:display:color:hasOre:tier(harvest)
@@ -154,21 +154,39 @@ for entry in "${MATERIALS[@]}"; do
   fi
 done
 
-# --- machines & cable -------------------------------------------------------
+# per-machine front-panel glyph drawn inside the recessed (4,4)-(11,11) window
+machine_icon() {
+  case "$1" in
+    macerator)   echo "circle 7,7 7,4 circle 7,7 7,10 circle 5,6 5,4 circle 9,8 9,6 circle 6,9 6,7" ;;
+    electric_furnace) echo "polygon 7,4 9,7 8,7 10,10 8,9 9,12 5,12 6,9 4,10 6,7 5,7" ;;
+    alloy_smelter) echo "circle 6,8 6,6 circle 9,8 9,6 rectangle 4,7 10,9" ;;
+    compressor)  echo "polygon 7,4 10,7 8,7 8,11 6,11 6,7 4,7" ;;
+    wiremill)    echo "rectangle 5,5 9,11 rectangle 4,8 10,8 rectangle 4,6 10,6" ;;
+    recycler)    echo "circle 7,7 7,4 circle 7,7 7,10 rectangle 7,6 8,8" ;;
+    centrifuge)  echo "circle 7,7 7,5 circle 7,7 7,8 circle 7,7 7,10" ;;
+    generator)   echo "polygon 6,3 8,3 7,7 9,7 6,12 8,7 5,7" ;;
+    *)           echo "rectangle 5,5 9,9" ;;
+  esac
+}
+
+# --- machines (uniform casing, distinct designs) ----------------------------
+CASING='#6F7379'
+CASING_DARK='#4c4f55'
+CASING_LIGHT='#8b9097'
 for entry in "${MACHINES[@]}"; do
-  IFS=':' read -r id display color <<< "$entry"
-  dark="$(darken "$color")"
+  IFS=':' read -r id display accent <<< "$entry"
+  icon="$(machine_icon "$id")"
   btex="$TEX_BLOCK/$id.png"
   convert -size 16x16 xc:none \
-    -fill '#2b2b31' -draw 'rectangle 0,0 15,15' \
-    -fill '#5a5a62' -draw 'rectangle 1,1 14,14' \
-    -fill '#6a6a72' -draw 'rectangle 1,1 14,2' -draw 'rectangle 1,1 2,14' \
-    -fill '#33333a' -draw 'rectangle 1,13 14,14' -draw 'rectangle 13,1 14,14' \
-    -fill "$color" -draw 'roundrectangle 4,4 11,11 2,2' \
-    -fill "$dark" -draw 'roundrectangle 4,4 11,5 2,2' -draw 'roundrectangle 4,10 11,11 2,2' -draw 'roundrectangle 4,4 5,11 2,2' -draw 'roundrectangle 10,4 11,11 2,2' \
-    -fill '#1b1b1f' -draw 'rectangle 6,6 9,9' \
-    -fill 'rgba(255,255,255,0.25)' -draw 'rectangle 3,2 5,3' \
-    -fill 'rgba(255,255,255,0.6)' -draw 'point 4,3' \
+    -fill "$CASING_DARK" -draw 'rectangle 0,0 15,15' \
+    -fill "$CASING" -draw 'rectangle 1,1 14,14' \
+    -fill "$CASING_LIGHT" -draw 'rectangle 1,1 14,3' -draw 'rectangle 1,1 3,14' \
+    -fill "$CASING_DARK" -draw 'rectangle 1,13 14,14' -draw 'rectangle 13,1 14,14' \
+    -fill '#2b2b31' -draw 'rectangle 3,3 12,12' \
+    -fill '#26262b' -draw 'rectangle 4,4 11,11' \
+    -fill "$accent" -draw "$icon" \
+    -fill 'rgba(255,255,255,0.22)' -draw 'rectangle 4,4 11,5' \
+    -fill "$accent" -draw 'circle 13,3 13,4' \
     "$btex" >/dev/null 2>&1 || true
   write_json "$MODEL_BLOCK/$id.json" "{\"parent\":\"minecraft:block/cube_all\",\"textures\":{\"all\":\"bentech:block/$id\"}}"
   write_json "$BLOCKSTATE/$id.json" "{\"variants\":{\"\":{\"model\":\"bentech:block/$id\"}}}"
@@ -176,17 +194,32 @@ for entry in "${MACHINES[@]}"; do
   add_lang "block.bentech.${id}" "$display"
 done
 
-# cable block
-convert -size 16x16 xc:none \
-  -fill '#2b2b31' -draw 'rectangle 0,0 15,15' \
-  -fill '#B87333' -draw 'rectangle 2,6 13,9' \
-  -fill '#E0C090' -draw 'rectangle 3,7 12,8' \
-  -fill '#33333a' -draw 'rectangle 0,0 15,1' -draw 'rectangle 0,14 15,15' \
+# cable block — rendered as a thin wire cross, not a solid block
+convert -size 16x16 xc:'#B87333' \
+  -fill '#9a5c26' -draw 'rectangle 0,0 15,1' -draw 'rectangle 0,14 15,15' -draw 'rectangle 0,0 1,15' -draw 'rectangle 14,0 15,15' \
+  -fill '#E0C090' -draw 'rectangle 0,6 15,8' \
+  -fill '#c98a4d' -draw 'rectangle 0,10 15,11' \
   "$TEX_BLOCK/cable.png" >/dev/null 2>&1 || true
-write_json "$MODEL_BLOCK/cable.json" "{\"parent\":\"minecraft:block/cube_all\",\"textures\":{\"all\":\"bentech:block/cable\"}}"
+write_json "$MODEL_BLOCK/cable.json" '{"textures":{"particle":"bentech:block/cable"},"elements":[{"from":[6,0,6],"to":[10,16,10],"textures":{"all":"bentech:block/cable"}},{"from":[0,6,6],"to":[16,10,10],"textures":{"all":"bentech:block/cable"}},{"from":[6,6,0],"to":[10,10,16],"textures":{"all":"bentech:block/cable"}}]}'
 write_json "$BLOCKSTATE/cable.json" "{\"variants\":{\"\":{\"model\":\"bentech:block/cable\"}}}"
 write_json "$MODEL_ITEM/cable.json" "{\"parent\":\"bentech:block/cable\"}"
 add_lang "block.bentech.cable" "Power Cable"
+
+# creative energy block
+convert -size 16x16 xc:none \
+  -fill '#2b2b31' -draw 'rectangle 0,0 15,15' \
+  -fill '#565a63' -draw 'rectangle 1,1 14,14' \
+  -fill '#6c707a' -draw 'rectangle 1,1 14,2' -draw 'rectangle 1,1 2,14' \
+  -fill '#3a3d44' -draw 'rectangle 1,13 14,14' -draw 'rectangle 13,1 14,14' \
+  -fill '#11131a' -draw 'roundrectangle 3,3 12,12 2,2' \
+  -fill '#39ff88' -draw 'roundrectangle 4,4 11,11 2,2' \
+  -fill '#baffd4' -draw 'roundrectangle 6,6 9,9 2,2' \
+  -fill '#1b1b1f' -draw 'point 5,5 point 10,5 point 5,10 point 10,10' \
+  "$TEX_BLOCK/creative_energy.png" >/dev/null 2>&1 || true
+write_json "$MODEL_BLOCK/creative_energy.json" "{\"parent\":\"minecraft:block/cube_all\",\"textures\":{\"all\":\"bentech:block/creative_energy\"}}"
+write_json "$BLOCKSTATE/creative_energy.json" "{\"variants\":{\"\":{\"model\":\"bentech:block/creative_energy\"}}}"
+write_json "$MODEL_ITEM/creative_energy.json" "{\"parent\":\"bentech:block/creative_energy\"}"
+add_lang "block.bentech.creative_energy" "Creative Energy Cell"
 
 # --- loot tables (drop-the-block-self) --------------------------------------
 # Without these, hand-mined blocks (ores/machines/metal blocks) drop nothing.
@@ -202,6 +235,7 @@ for entry in "${MACHINES[@]}"; do
   write_loot "$id"
 done
 write_loot "cable"
+write_loot "creative_energy"
 
 # --- component items (with nicer sprites) -----------------------------------
 COMPONENTS=(
@@ -214,20 +248,108 @@ COMPONENTS=(
   "battery:Battery:#4CAF50"
   "emitter:Emitter:#FF7043"
   "sensor:Sensor:#29B6F6"
+  "basic_gearbox:Basic Gearbox:#A0A8B0"
+  "advanced_gearbox:Advanced Gearbox:#8A9098"
+  "piston:Piston:#B0622E"
+  "conveyor:Conveyor:#7B9DA8"
+  "robot_arm:Robot Arm:#9C7CC8"
+  "magnet:Magnet:#D75B8B"
+  "coil:Coil:#C98A4D"
+  "field_generator:Field Generator:#54D6E0"
+  "wrench:Wrench:#9FB6C8"
+  "hammer:Hammer:#C0C0C0"
+  "screwdriver:Screwdriver:#B8B8C0"
+  "wire_cutter:Wire Cutter:#D0D0D0"
+  "file:File:#B09070"
+  "crowbar:Crowbar:#9A9A9A"
 )
+# per-component sprite (tools get distinct silhouettes, others a chip)
+component_shape() {
+  case "$1" in
+    wrench)      echo "roundrectangle 6,4 9,7 1,1 rectangle 4,7 11,8 roundrectangle 7,7 8,12 1,1" ;;
+    hammer)      echo "rectangle 4,4 11,6 roundrectangle 7,6 8,12 1,1" ;;
+    screwdriver) echo "roundrectangle 5,4 10,6 2,2 rectangle 7,6 8,12" ;;
+    wire_cutter) echo "polygon 4,5 6,3 7,5 polygon 11,5 9,3 8,5 roundrectangle 6,5 9,10 1,1" ;;
+    file)        echo "rectangle 5,4 10,11" ;;
+    crowbar)     echo "roundrectangle 4,4 11,5 1,1 roundrectangle 4,5 5,11 1,1" ;;
+    *)           echo "roundrectangle 4,5 11,10 1,1" ;;
+  esac
+}
+
 for entry in "${COMPONENTS[@]}"; do
   IFS=':' read -r id display color <<< "$entry"
   dark="$(darken "$color")"
-  shape="roundrectangle 4,5 11,10 1,1"
-  convert -size 16x16 xc:none \
-    -fill "$dark" -draw "translate 1,1 $shape" \
-    -fill "$color" -draw "$shape" \
-    -fill 'rgba(255,255,255,0.25)' -draw "translate -1,-1 $shape" \
-    -fill '#1b1b1f' -draw 'rectangle 7,2 8,4' -draw 'rectangle 7,11 8,13' \
-    "$TEX_ITEM/$id.png" >/dev/null 2>&1 || true
+  shape="$(component_shape "$id")"
+  args=(-size 16x16 xc:none -fill "$dark" -draw "translate 1,1 $shape" \
+        -fill "$color" -draw "$shape" \
+        -fill 'rgba(255,255,255,0.25)' -draw "translate -1,-1 $shape")
+  case "$id" in
+    wrench|hammer|screwdriver|wire_cutter|file|crowbar) ;;
+    *) args+=(-fill '#1b1b1f' -draw 'rectangle 7,2 8,4' -draw 'rectangle 7,11 8,13') ;;
+  esac
+  convert "${args[@]}" "$TEX_ITEM/$id.png" >/dev/null 2>&1 || true
   write_json "$MODEL_ITEM/$id.json" "{\"parent\":\"minecraft:item/generated\",\"textures\":{\"layer0\":\"bentech:item/$id\"}}"
   add_lang "item.bentech.${id}" "$display"
 done
+
+# --- GUI textures -----------------------------------------------------------
+# slot_arg appends ImageMagick draw ops for a slot frame centred at (x,y).
+slot_arg() {
+  local x="$1" y="$2"
+  local fx=$((x-1)) fy=$((y-1)) tx=$((x+16)) ty=$((y+16))
+  GUI_ARGS+=(-fill '#4a4a54' -draw "roundrectangle $fx,$fy $tx,$ty 2,2")
+  GUI_ARGS+=(-fill '#131318' -draw "roundrectangle $x,$y $((x+15)),$((y+15)) 2,2")
+  GUI_ARGS+=(-fill '#2c2c33' -draw "rectangle $((x+1)),$((y+1)) $((x+14)),$((y+3))")
+}
+
+gen_gui_machine() {
+  GUI_ARGS=(-size 176x166 xc:'#1b1b1f')
+  GUI_ARGS+=(-fill '#26262b' -draw 'roundrectangle 0,0 175,165 5,5')
+  GUI_ARGS+=(-fill '#3a3a42' -draw 'rectangle 1,1 174,3')
+  GUI_ARGS+=(-fill '#1b1b1f' -draw 'rectangle 1,4 174,164')
+  # energy gauge frame (left)
+  GUI_ARGS+=(-fill '#3a3a42' -draw 'rectangle 7,26 21,58' -fill '#131318' -draw 'rectangle 9,28 19,56' -fill '#0c0c10' -draw 'rectangle 10,29 18,55')
+  # progress arrow frame (between inputs and output)
+  GUI_ARGS+=(-fill '#3a3a42' -draw 'rectangle 86,30 112,42' -fill '#131318' -draw 'rectangle 88,32 110,40' -fill '#0c0c10' -draw 'rectangle 89,33 109,39')
+  # machine slots: input A/B + output
+  slot_arg 45 27; slot_arg 63 27; slot_arg 115 27
+  # player inventory slots (3 rows + hotbar)
+  local row col
+  for row in 0 1 2; do
+    for col in 0 1 2 3 4 5 6 7 8; do
+      slot_arg $((8 + col*18)) $((84 + row*18))
+    done
+  done
+  for col in 0 1 2 3 4 5 6 7 8; do
+    slot_arg $((8 + col*18)) 142
+  done
+  convert "${GUI_ARGS[@]}" "$GUI/machine_gui.png" >/dev/null 2>&1 || true
+}
+
+gen_gui_creative() {
+  GUI_ARGS=(-size 176x166 xc:'#1b1b1f')
+  GUI_ARGS+=(-fill '#26262b' -draw 'roundrectangle 0,0 175,165 5,5')
+  GUI_ARGS+=(-fill '#3a3a42' -draw 'rectangle 1,1 174,3')
+  GUI_ARGS+=(-fill '#1b1b1f' -draw 'rectangle 1,4 174,164')
+  # glowing core display box
+  GUI_ARGS+=(-fill '#3a3a42' -draw 'rectangle 8,24 168,74')
+  GUI_ARGS+=(-fill '#0c0c10' -draw 'rectangle 10,26 166,72')
+  GUI_ARGS+=(-fill '#39ff88' -draw 'rectangle 12,28 164,44' -draw 'rectangle 12,50 164,70')
+  # player inventory slots
+  local row col
+  for row in 0 1 2; do
+    for col in 0 1 2 3 4 5 6 7 8; do
+      slot_arg $((8 + col*18)) $((84 + row*18))
+    done
+  done
+  for col in 0 1 2 3 4 5 6 7 8; do
+    slot_arg $((8 + col*18)) 142
+  done
+  convert "${GUI_ARGS[@]}" "$GUI/creative_gui.png" >/dev/null 2>&1 || true
+}
+
+gen_gui_machine
+gen_gui_creative
 
 # --- language file ----------------------------------------------------------
 add_lang "itemGroup.bentech" "BenTech"
@@ -248,7 +370,7 @@ STONE=""
 IRON=""
 DIAMOND=""
 
-all_blocks() { echo "bentech:macerator bentech:electric_furnace bentech:alloy_smelter bentech:compressor bentech:wiremill bentech:recycler bentech:centrifuge bentech:generator bentech:cable"; }
+all_blocks() { echo "bentech:macerator bentech:electric_furnace bentech:alloy_smelter bentech:compressor bentech:wiremill bentech:recycler bentech:centrifuge bentech:generator bentech:cable bentech:creative_energy"; }
 
 for entry in "${MATERIALS[@]}"; do
   IFS=':' read -r name display color hasore tier <<< "$entry"
@@ -313,5 +435,22 @@ write_json "$RECIPE/recycler.json" '{"type":"minecraft:crafting_shaped","pattern
 write_json "$RECIPE/centrifuge.json" '{"type":"minecraft:crafting_shaped","pattern":["mmm","mcm","msm"],"key":{"m":{"item":"bentech:machine_casing"},"c":{"item":"bentech:advanced_circuit"},"s":{"item":"bentech:sensor"}},"result":{"item":"bentech:centrifuge","count":1}}'
 write_json "$RECIPE/alloy_smelter.json" '{"type":"minecraft:crafting_shaped","pattern":["mmm","mcm","mmm"],"key":{"m":{"item":"bentech:machine_casing"},"c":{"item":"bentech:advanced_circuit"}},"result":{"item":"bentech:alloy_smelter","count":1}}'
 write_json "$RECIPE/generator.json" '{"type":"minecraft:crafting_shaped","pattern":["mmm","mcm","c m"],"key":{"m":{"item":"bentech:machine_casing"},"c":{"item":"bentech:basic_circuit"}},"result":{"item":"bentech:generator","count":1}}'
+write_json "$RECIPE/creative_energy.json" '{"type":"minecraft:crafting_shaped","pattern":["cec","efe","cec"],"key":{"c":{"item":"bentech:advanced_circuit"},"e":{"item":"bentech:emitter"},"f":{"item":"bentech:field_generator"}},"result":{"item":"bentech:creative_energy","count":1}}'
+
+# Extra GregTech components & tools
+write_json "$RECIPE/magnet.json" '{"type":"minecraft:crafting_shaped","pattern":["ni","in"],"key":{"n":{"item":"bentech:nickel_nugget"},"i":{"item":"bentech:iron_ingot"}},"result":{"item":"bentech:magnet","count":1}}'
+write_json "$RECIPE/coil.json" '{"type":"minecraft:crafting_shaped","pattern":["www","w w","www"],"key":{"w":{"item":"bentech:copper_wire"}},"result":{"item":"bentech:coil","count":2}}'
+write_json "$RECIPE/basic_gearbox.json" '{"type":"minecraft:crafting_shaped","pattern":["g g","grg","g g"],"key":{"g":{"item":"bentech:iron_gear"},"r":{"item":"bentech:iron_rod"}},"result":{"item":"bentech:basic_gearbox","count":1}}'
+write_json "$RECIPE/advanced_gearbox.json" '{"type":"minecraft:crafting_shaped","pattern":["g g","grg","g g"],"key":{"g":{"item":"bentech:steel_gear"},"r":{"item":"bentech:steel_rod"}},"result":{"item":"bentech:advanced_gearbox","count":1}}'
+write_json "$RECIPE/piston.json" '{"type":"minecraft:crafting_shaped","pattern":["ppp","m m","r r"],"key":{"p":{"item":"minecraft:iron_ingot"},"m":{"item":"bentech:electric_motor"},"r":{"item":"bentech:iron_rod"}},"result":{"item":"bentech:piston","count":1}}'
+write_json "$RECIPE/conveyor.json" '{"type":"minecraft:crafting_shaped","pattern":["mpm","ggg"],"key":{"m":{"item":"bentech:electric_motor"},"p":{"item":"bentech:iron_plate"},"g":{"item":"bentech:tin_gear"}},"result":{"item":"bentech:conveyor","count":1}}'
+write_json "$RECIPE/robot_arm.json" '{"type":"minecraft:crafting_shaped","pattern":["cc ","mpm","rr "],"key":{"c":{"item":"bentech:advanced_circuit"},"m":{"item":"bentech:electric_motor"},"p":{"item":"bentech:piston"},"r":{"item":"bentech:iron_rod"}},"result":{"item":"bentech:robot_arm","count":1}}'
+write_json "$RECIPE/field_generator.json" '{"type":"minecraft:crafting_shaped","pattern":["cmc","cec","cmc"],"key":{"c":{"item":"bentech:copper_plate"},"m":{"item":"bentech:magnet"},"e":{"item":"bentech:emitter"}},"result":{"item":"bentech:field_generator","count":1}}'
+write_json "$RECIPE/wrench.json" '{"type":"minecraft:crafting_shaped","pattern":[" c "," c "," s "],"key":{"c":{"item":"bentech:copper_plate"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:wrench","count":1}}'
+write_json "$RECIPE/hammer.json" '{"type":"minecraft:crafting_shaped","pattern":["iii"," s "," s "],"key":{"i":{"item":"bentech:iron_ingot"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:hammer","count":1}}'
+write_json "$RECIPE/screwdriver.json" '{"type":"minecraft:crafting_shaped","pattern":["  i","  s","   "],"key":{"i":{"item":"bentech:iron_ingot"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:screwdriver","count":1}}'
+write_json "$RECIPE/wire_cutter.json" '{"type":"minecraft:crafting_shaped","pattern":["pi","ip"],"key":{"p":{"item":"bentech:iron_plate"},"i":{"item":"minecraft:iron_ingot"}},"result":{"item":"bentech:wire_cutter","count":1}}'
+write_json "$RECIPE/file.json" '{"type":"minecraft:crafting_shaped","pattern":["ii","ii"," s"],"key":{"i":{"item":"bentech:iron_ingot"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:file","count":1}}'
+write_json "$RECIPE/crowbar.json" '{"type":"minecraft:crafting_shaped","pattern":["i  "," s "," s "],"key":{"i":{"item":"bentech:iron_ingot"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:crowbar","count":1}}'
 
 echo "Done. Generated assets for ${#MATERIALS[@]} materials, ${#MACHINES[@]} machines."

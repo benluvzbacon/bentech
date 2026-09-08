@@ -36,6 +36,8 @@ public class BenTech implements ModInitializer {
         // Touch static holders so block entities and the menu type register now.
         LOGGER.info("Registered block entity types: {}", ModBlockEntities.PROCESSING);
         LOGGER.info("Registered machine menu: {}", ModMenus.MACHINE);
+        LOGGER.info("Registered creative energy: block={} menu={}",
+                ModBlocks.CREATIVE_ENERGY.getDescriptionId(), ModMenus.CREATIVE);
         MachineRecipes.build();
         ModCreativeTab.load();
         ModWorldgen.register();

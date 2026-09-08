@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["i  "," s "," s "],"key":{"i":{"item":"bentech:iron_ingot"},"s":{"item":"minecraft:stick"}},"result":{"item":"bentech:crowbar","count":1}}

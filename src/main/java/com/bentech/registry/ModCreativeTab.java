@@ -35,6 +35,7 @@ public final class ModCreativeTab {
                     output.accept(new ItemStack(ModBlocks.CENTRIFUGE));
                     output.accept(new ItemStack(ModBlocks.GENERATOR));
                     output.accept(new ItemStack(ModBlocks.CABLE));
+                    output.accept(new ItemStack(ModBlocks.CREATIVE_ENERGY));
                     output.accept(new ItemStack(ModItems.MACHINE_CASING));
                     output.accept(new ItemStack(ModItems.BASIC_CIRCUIT));
                     output.accept(new ItemStack(ModItems.ADVANCED_CIRCUIT));
@@ -44,6 +45,20 @@ public final class ModCreativeTab {
                     output.accept(new ItemStack(ModItems.BATTERY));
                     output.accept(new ItemStack(ModItems.EMITTER));
                     output.accept(new ItemStack(ModItems.SENSOR));
+                    output.accept(new ItemStack(ModItems.BASIC_GEARBOX));
+                    output.accept(new ItemStack(ModItems.ADVANCED_GEARBOX));
+                    output.accept(new ItemStack(ModItems.PISTON));
+                    output.accept(new ItemStack(ModItems.CONVEYOR));
+                    output.accept(new ItemStack(ModItems.ROBOT_ARM));
+                    output.accept(new ItemStack(ModItems.MAGNET));
+                    output.accept(new ItemStack(ModItems.COIL));
+                    output.accept(new ItemStack(ModItems.FIELD_GENERATOR));
+                    output.accept(new ItemStack(ModItems.WRENCH));
+                    output.accept(new ItemStack(ModItems.HAMMER));
+                    output.accept(new ItemStack(ModItems.SCREWDRIVER));
+                    output.accept(new ItemStack(ModItems.WIRE_CUTTER));
+                    output.accept(new ItemStack(ModItems.FILE));
+                    output.accept(new ItemStack(ModItems.CROWBAR));
                     for (Material m : Materials.all()) {
                         accept(output, m.dust);
                         accept(output, m.ingot);

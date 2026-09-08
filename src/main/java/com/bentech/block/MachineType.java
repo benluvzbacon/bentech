@@ -9,11 +9,11 @@ import com.bentech.api.Tier;
 public enum MachineType {
     MACERATOR("macerator", "Macerator", Tier.LV, MachineKind.PROCESSING),
     ELECTRIC_FURNACE("electric_furnace", "Electric Furnace", Tier.LV, MachineKind.PROCESSING),
-    ALLOY_SMELTER("alloy_smelter", "Alloy Smelter", Tier.MV, MachineKind.PROCESSING),
+    ALLOY_SMELTER("alloy_smelter", "Alloy Smelter", Tier.LV, MachineKind.PROCESSING),
     COMPRESSOR("compressor", "Compressor", Tier.LV, MachineKind.PROCESSING),
     WIREMILL("wiremill", "Wiremill", Tier.LV, MachineKind.PROCESSING),
-    RECYCLER("recycler", "Recycler", Tier.MV, MachineKind.PROCESSING),
-    CENTRIFUGE("centrifuge", "Centrifuge", Tier.MV, MachineKind.PROCESSING),
+    RECYCLER("recycler", "Recycler", Tier.LV, MachineKind.PROCESSING),
+    CENTRIFUGE("centrifuge", "Centrifuge", Tier.LV, MachineKind.PROCESSING),
     GENERATOR("generator", "Generator", Tier.LV, MachineKind.GENERATOR);
 
     private final String id;

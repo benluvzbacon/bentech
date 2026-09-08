@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["cc ","mpm","rr "],"key":{"c":{"item":"bentech:advanced_circuit"},"m":{"item":"bentech:electric_motor"},"p":{"item":"bentech:piston"},"r":{"item":"bentech:iron_rod"}},"result":{"item":"bentech:robot_arm","count":1}}

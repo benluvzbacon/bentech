@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","pattern":["cmc","cec","cmc"],"key":{"c":{"item":"bentech:copper_plate"},"m":{"item":"bentech:magnet"},"e":{"item":"bentech:emitter"}},"result":{"item":"bentech:field_generator","count":1}}

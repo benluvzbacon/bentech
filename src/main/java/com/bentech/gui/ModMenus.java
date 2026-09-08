@@ -16,6 +16,11 @@ public final class ModMenus {
             BenTech.id("machine"),
             new MenuType<>(MachineMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
+    public static final MenuType<CreativeMenu> CREATIVE = Registry.register(
+            BuiltInRegistries.MENU,
+            BenTech.id("creative_energy"),
+            new MenuType<>(CreativeMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
     private ModMenus() {
     }
 }
