@@ -6,6 +6,7 @@ on:
     branches:
       - "arena/01a07e60-bentech"
     paths-ignore:
+      - "release/**"
       - "dist/**"
       - "build-log.txt"
 
@@ -36,17 +37,17 @@ jobs:
       - name: Show built artifacts
         run: ls -la build/libs/ || true
 
-      - name: Stage mod JAR into repo (for transfer)
+      - name: Stage mod JAR into repo (for transfer/persistence)
         run: |
-          mkdir -p dist
-          cp build/libs/*.jar dist/ || true
-          ls -la dist/ || true
+          mkdir -p release
+          cp build/libs/bentech-1.0.0.jar release/ || true
+          ls -la release/ || true
 
       - name: Commit mod JAR
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add dist || true
+          git add release || true
           if git diff --cached --quiet; then
             echo "no changes to commit"
           else
