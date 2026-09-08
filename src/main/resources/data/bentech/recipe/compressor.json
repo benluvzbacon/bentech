@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["mm m","mcm","mmm"],
+  "key": {"m": {"item": "bentech:machine_casing"}, "c": {"item": "bentech:basic_circuit"}},
+  "result": {"item": "bentech:compressor", "count": 1}
+}

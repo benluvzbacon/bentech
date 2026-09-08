@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["ggg","gcg","ggg"],
+  "key": {"g": {"item": "bentech:gold_plate"}, "c": {"item": "bentech:basic_circuit"}},
+  "result": {"item": "bentech:advanced_circuit", "count": 1}
+}

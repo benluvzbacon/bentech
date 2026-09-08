@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["ggg","gc g","ggg"],
+  "key": {"g": {"item": "bentech:copper_plate"}, "c": {"item": "bentech:capacitor"}},
+  "result": {"item": "bentech:basic_circuit", "count": 1}
+}

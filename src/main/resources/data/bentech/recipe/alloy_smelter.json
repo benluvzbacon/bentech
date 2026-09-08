@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": ["   ","aca","   "],
+  "key": {"a": {"item": "bentech:advanced_circuit"}, "c": {"item": "bentech:machine_casing"}},
+  "result": {"item": "bentech:alloy_smelter", "count": 1}
+}
