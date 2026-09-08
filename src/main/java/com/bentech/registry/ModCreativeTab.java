@@ -3,6 +3,7 @@ package com.bentech.registry;
 import com.bentech.BenTech;
 import com.bentech.api.Material;
 import com.bentech.api.Materials;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -21,7 +22,7 @@ public final class ModCreativeTab {
     }
 
     public static void load() {
-        CreativeModeTab tab = CreativeModeTab.builder()
+        CreativeModeTab tab = FabricItemGroup.builder()
                 .title(Component.translatable("itemGroup.bentech"))
                 .icon(() -> new ItemStack(Materials.Iron.dust == null ? Materials.Iron.ingot : Materials.Iron.dust))
                 .displayItems((params, output) -> {

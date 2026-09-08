@@ -184,7 +184,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
             CompoundTag itemTag = new CompoundTag();
             ItemStack stack = getSlotItem(i);
             if (!stack.isEmpty()) {
-                itemTag = stack.save(registries, itemTag);
+                stack.save(registries, itemTag);
             }
             list.add(itemTag);
         }
