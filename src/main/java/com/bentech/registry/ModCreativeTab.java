@@ -7,16 +7,21 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 /**
- * A single creative tab containing every material form, machine and component
- * so the whole progression loop is explorable.
+ * The BenTech creative tab. Registered as a {@code CreativeModeTab} under a
+ * {@link ResourceKey}, populated via {@code displayItems}. The tab icon is
+ * guaranteed non-empty (falls back to a vanilla item) so the tab always renders.
  */
 public final class ModCreativeTab {
+
+    public static final ResourceKey<CreativeModeTab> KEY =
+            ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), BenTech.id("main"));
 
     private ModCreativeTab() {
     }
@@ -24,7 +29,7 @@ public final class ModCreativeTab {
     public static void load() {
         CreativeModeTab tab = FabricItemGroup.builder()
                 .title(Component.translatable("itemGroup.bentech"))
-                .icon(() -> new ItemStack(Materials.Iron.dust == null ? Materials.Iron.ingot : Materials.Iron.dust))
+                .icon(ModCreativeTab::icon)
                 .displayItems((params, output) -> {
                     output.accept(new ItemStack(ModBlocks.MACERATOR));
                     output.accept(new ItemStack(ModBlocks.ELECTRIC_FURNACE));
@@ -72,8 +77,14 @@ public final class ModCreativeTab {
                     }
                 })
                 .build();
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(BenTech.MOD_ID, "main");
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, id, tab);
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, KEY, tab);
+    }
+
+    /** A tab icon that is never empty (falls back to a vanilla item). */
+    private static ItemStack icon() {
+        Item icon = Materials.Iron.dust != null ? Materials.Iron.dust
+                : (Materials.Iron.ingot != null ? Materials.Iron.ingot : Items.IRON_INGOT);
+        return new ItemStack(icon);
     }
 
     private static void accept(CreativeModeTab.Output output, Item item) {
