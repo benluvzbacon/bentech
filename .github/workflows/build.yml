@@ -5,9 +5,12 @@ on:
   push:
     branches:
       - "arena/01a07e60-bentech"
+    paths-ignore:
+      - "dist/**"
+      - "build-log.txt"
 
 permissions:
-  contents: read
+  contents: write
   actions: write
 
 jobs:
@@ -28,24 +31,30 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon --console=plain 2>&1 | tee build-log.txt
-        continue-on-error: true
+        run: ./gradlew build --no-daemon --console=plain
 
-      - name: Show tail of build log
-        if: always()
+      - name: Show built artifacts
+        run: ls -la build/libs/ || true
+
+      - name: Stage mod JAR into repo (for transfer)
         run: |
-          echo "===== BUILD LOG (tail 120) ====="
-          tail -n 120 build-log.txt || true
+          mkdir -p dist
+          cp build/libs/*.jar dist/ || true
+          ls -la dist/ || true
 
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build-log.txt
+      - name: Commit mod JAR
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add dist || true
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+          else
+            git commit -m "chore: build artifact" || true
+            git push || true
+          fi
 
       - name: Upload mod JAR
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: bentech-jar
