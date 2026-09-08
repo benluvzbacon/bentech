@@ -10,6 +10,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -50,8 +51,8 @@ public class MachineBlock extends BaseEntityBlock {
 
     // Renders the block as a normal 3D model (BaseEntityBlock defaults to INVISIBLE).
     @Override
-    protected BlockBehaviour.RenderShape getRenderShape(BlockState state) {
-        return BlockBehaviour.RenderShape.MODEL;
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 
     @Override

@@ -20,16 +20,23 @@ MC_TAG="$DATA/minecraft/tags/block"
 RECIPE="$DATA/bentech/recipe"
 CONF="$DATA/bentech/worldgen/configured_feature"
 PLACED="$DATA/bentech/worldgen/placed_feature"
+LOOT="$DATA/bentech/loot_table/blocks"
 GUI="$RES/textures/gui"
 
 mkdir -p "$TEX_ITEM" "$TEX_BLOCK" "$MODEL_ITEM" "$MODEL_BLOCK" "$BLOCKSTATE" "$LANG" \
-         "$MC_TAG" "$MC_TAG/mineable" "$RECIPE" "$CONF" "$PLACED" "$GUI"
+         "$MC_TAG" "$MC_TAG/mineable" "$RECIPE" "$CONF" "$PLACED" "$LOOT" "$GUI"
 
 # --- colour helpers ---------------------------------------------------------
 darken() { python3 -c "import sys;c=sys.argv[1].lstrip('#');r,g,b=[int(c[i:i+2],16) for i in (0,2,4)];r,g,b=[int(x*0.6) for x in (r,g,b)];print(f'#{r:02x}{g:02x}{b:02x}')" "$1"; }
 lighten() { python3 -c "import sys;c=sys.argv[1].lstrip('#');r,g,b=[int(c[i:i+2],16) for i in (0,2,4)];r,g,b=[min(240,int(x*1.25+12)) for x in (r,g,b)];print(f'#{r:02x}{g:02x}{b:02x}')" "$1"; }
 
 write_json() { printf '%s' "$2" > "$1"; }
+
+# Standard block loot table that drops the block itself.
+write_loot() {
+  local name="$1"
+  write_json "$LOOT/$name.json" "{\"type\":\"minecraft:block\",\"pools\":[{\"bonus_rolls\":0,\"conditions\":[{\"condition\":\"minecraft:survives_explosion\"}],\"entries\":[{\"type\":\"minecraft:item\",\"name\":\"bentech:$name\"}],\"rolls\":1}]}"
+}
 
 # --- form draw shapes -------------------------------------------------------
 form_shape() {
@@ -180,6 +187,21 @@ write_json "$MODEL_BLOCK/cable.json" "{\"parent\":\"minecraft:block/cube_all\",\
 write_json "$BLOCKSTATE/cable.json" "{\"variants\":{\"\":{\"model\":\"bentech:block/cable\"}}}"
 write_json "$MODEL_ITEM/cable.json" "{\"parent\":\"bentech:block/cable\"}"
 add_lang "block.bentech.cable" "Power Cable"
+
+# --- loot tables (drop-the-block-self) --------------------------------------
+# Without these, hand-mined blocks (ores/machines/metal blocks) drop nothing.
+for entry in "${MATERIALS[@]}"; do
+  IFS=':' read -r name display color hasore tier <<< "$entry"
+  write_loot "block_${name}"
+  if [ "$hasore" = "1" ]; then
+    write_loot "ore_${name}"
+  fi
+done
+for entry in "${MACHINES[@]}"; do
+  IFS=':' read -r id display color <<< "$entry"
+  write_loot "$id"
+done
+write_loot "cable"
 
 # --- component items (with nicer sprites) -----------------------------------
 COMPONENTS=(
